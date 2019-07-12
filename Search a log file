@@ -1,0 +1,40 @@
+Problem:
+a large log file. 
+Each line has the date/time and a log message in some format. 
+Some lines carry over from the previous line and don't have a date/time (ie. stack traces). 
+Find all entries within a specified time range. 
+-------------------
+lines with a date will have a timestamp followed by a tab and then the log text (so something simple). 
+The query times can be timestamps as well.
+If the candidate suggests to abstract parts of the questions, 
+it is always a good thing and the details of the abstraction can be looked at later.
+--------------------
+
+Solution
+Clearly naive solution is to scan line by line. 
+
+A typical solution is of course to do *binary search*.
+Seek to the next line and parse each line and pattern match to determine if there is a date. Candidate is free to abstract away this part (and later fill in the implementation details if there is time) and just explain what his magic function would do. The 'mid' should not have to change as we recurse. If the candidate tries to be smart with the 'mid' because we are looking for the next line with a date to save on a few extra comparisons, then watch intently for edge cases.
+So the candidate should be able to implement binary search. Watch for exit conditions, edge cases, and what to compare, and how to update the new bounds. Candidate should be able to handle duplicates properly and consider everything within the range. For this simple question expect and look for attention to detail.
+Finally candidate should be able to scan the range linearly and print out the lines, or run a second binary search to figure out the end of the range. If doing a binary search, take care how the candidate will handle duplicates, (either offset the search or flip the signs). At this point it might be a good idea to see if the candidate can make the binary search generic/reusable. Ask for why the candidate would choose one way over another. Ie code reuse, or other things that make sense.
+Preprocessing the log file is good, and in this case the binary search can be done here. The candidate can generate an index for it (ie map reduce, or generating an index as the log file grows, etc). If the index can fit in memory the candidate would get a real speed advantage on query time.
+It is nice if the candidate can separate out the components and parts of the system and show how things are done. This might affect the implementation. For example, if the candidate decides to use 2 binary searches, the search can return the positions in the file and some other component would use these positions to print out the lines, or be able to do something else entirely giving more flexibility. The candidate can show that when you have your processes outputting to the log files, you can have another process listening into the stream and generating maybe index files. And then when you do queries, it will query the index files for the positions in the original log file. Then it would go open up the file and print all the lines between those 2 locations.
+Evaluation
+At the very minimum binary search should be involved
+Good if the candidate asks for clarifications - ie is the range inclusive/exclusive (you can just decide), or if there are duplicates, or if there are multiple queries, etc.
+Good if the candidate abstracts finding the next line with a date / gives a good explanation how it would be done (ie readline to finish off the line, read the next line and regex until a date is found)
+Good if the candidate does not mess with the mid position once you find the next line with a date
+Good if the candidate takes care of exit conditions/edge cases/the math/what to compare
+Good if the candidate doesn't need to be reminded about handling duplicates
+Good if the candidate can justify decisions (ie linearly searching for the end of the range once you find it)
+Good if the candidate thinks about pre-processing the file to generate an index for multiple queries
+Good if the candidate can tie the different parts of the system clearly without handwaving
+Good if the candidate can justify decisions/alter choices as necessary
+Good if the candidate can keep in mind readability/code reuse/simplicity/abstraction/etc (anything you would expect from real code)
+Follow-up Questions
+If the candidate has not thought about pre-processing, try and urge the candidate towards it.
+ie What if many lines don't have the date? Doing a seek for the next line with the date might be long
+Ask the candidate how the index would be built- ie once a day, or online, etc
+What if multiple servers are generating log files?
+Make the binary search code reusable.
+
