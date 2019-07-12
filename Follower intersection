@@ -1,0 +1,14 @@
+Question
+An @reply will be sent to the people who follow the sender and the user mentioned. For example, if @shaq sends an @reply to @ladygaga, the tweet would be sent to users who follow @ladygaga and @shaq.
+built a system to show the list of users who will see a given tweet. How would you do this?
+
+ this problem is about finding the intersection of two arrays.
+
+Solution 1
+Create a hash, mapping user id to user object, for the first set of followers. 
+Then loop over the second timeline, storing users from the second collection if they also exist in the hash.
+The runtime cost for two sequential loops is O(B.length)  + O(A.length) * O(1) --> O(B.length + A.length).
+
+Solution 2
+Given sorted lists, use binary search for the larger set rather than iteration (assuming both sets are sorted). This is useful if one set is much larger than the other.
+The algo complexity for this solution would be O(B.length * log A.length)
