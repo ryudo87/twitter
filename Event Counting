@@ -1,0 +1,73 @@
+medium to large-scale data processing (not necessarily Hadoop, but large database queries/logfile processing/etc. are directly relevant
+
+Problem
+maintain aggregate counts of a high-velocity streams of events. 
+For example, if we wanted to know how many tweets were created on a given day, we don't want to walk through the logs of every event; 
+we would rather have a rolled-up count ready for us to query. (optimize for reads, not writes.)
+run these queries for different granularities; we should be able to get rollups at the minute, hour, or day level.
+To support this service, we need to develop a class which implements the following interface (and using the provided enumeration):
+enum Granularity {
+  MINUTE, HOUR, DAY
+}
+ 
+interface CountingService {
+  public void recordEvent(String eventName, float timeInMillis);
+  public long[] getEventCounts(Granularity granularity, String eventName, float startTime, float endTime);
+}
+This class should support out-of-order events.
+
+Solution
+use a small number of mappings, either from event name to a submap of timestamps and counts, or from event name at the top level to granularity -> (event -> count) mappings.
+=====================================================
+class CountingServiceImpl implements CountingService {
+  private Map<String, SortedMap<Float, Long>> eventsByDay;
+  private Map<String, SortedMap<Float, Long>> eventsByHour;
+  private Map<String, SortedMap<Float, Long>> eventsByMinute;
+ 
+  public CountingServiceImpl() {
+    eventsByDay = new HashMap<String, new TreeMap<Float, Long>>;
+    eventsByMinute = new HashMap<String, new TreeMap<Float, Long>>;
+    eventsByHour = new HashMap<String, new TreeMap<Float, Long>>;
+  }
+ 
+  public void recordEvent(String eventName, float timeInMillis) {
+    minuteBucket = timeInMillis / (60*1000);
+    hourBucket = minuteBucket / 60;
+    dayBucket = hourBucket / 24;
+ 
+    incrementKey(eventsByMinute, minuteBucket);
+    incrementKey(eventsByHour, hourBucket);
+    incrementKey(eventsByDay, dayBucket);
+  }
+ 
+  public Long[] getEventCounts(Granularity g, String eventName, float startTime, float endTime) {
+    Map<String, SortedMap<Float, Long>> events = getEventMapForGranularity(g);
+    SortedMap<Float, Long> counts = events.get(eventName);
+ 
+    // TODO: error handling if eventName is invalid/unknown
+ 
+    timeSeries = counts.subMap(startTime, endTime);
+    return (Long[]) timeSeries.values();
+  }
+ 
+  private void incrementKey(Map<Float, Long> map, float key) {
+    long current = map.containsKey(key) ? map.get(key) : 0;
+    map.set(key, current+1);
+  }
+ 
+  private Map<String, TreeMap<Float, Long>> getEventMapForGranularity(Granularity g) {
+    Map<String, Map<Float, Long>> events;
+ 
+    if (granularity == Granularity.MINUTE) {
+      eventsForGranularity = eventsByMinute;
+    } else if (granularity == Granularity.HOUR) {
+      eventsForGranularity = eventsByHour;
+    } else {
+      eventsForGranularity = eventsByDay;
+    }
+ 
+    return events;
+  }
+}
+
+===========================
