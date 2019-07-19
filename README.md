@@ -1,6 +1,30 @@
-Twitter (34)
+http://206.81.6.248:12306/leetcode/Dropbox/algorithm
 2 Add Two Numbers
+
 146	LRU Cache
+
+5	Longest Palindromic Substring
+
+4	Median of Two Sorted Arrays
+
+200	Number of Islands
+
+42	Trapping Rain Water
+
+56	Merge Intervals (medium)
+
+23	Merge k Sorted Lists (hard)
+
+20	Valid Parentheses
+
+206	Reverse Linked List
+
+7	Reverse Integer
+
+238	Product of Array Except Self
+
+76	Minimum Window Substring  (hard)
+===============================
 433 Minimum Genetic Mutation (medium)
 
 296 Best Meeting Point
@@ -26,13 +50,11 @@ Twitter (34)
 149 Max Points on a Line
 208 Implement Trie (Prefix Tree)
 60 Permutation Sequence
-20 Valid Parentheses
-42 Trapping Rain Water
+
+
 10 Regular Expression Matching
 235 Lowest Common Ancestor of a Binary Search Tree
-56 Merge Intervals
-206 Reverse Linked List
-23 Merge k Sorted Lists
+
 43 Multiply Strings
 44 Wildcard Matching
 118 Pascal’s Triangle
