@@ -1,5 +1,6 @@
 Twitter (34)
-
+2 Add Two Numbers
+146	LRU Cache
 433 Minimum Genetic Mutation (medium)
 
 296 Best Meeting Point
